@@ -1,0 +1,436 @@
+body {
+  margin: 0;
+  /* Roboto לאותיות באנגלית ו-Heebo לעברית (Heebo בנוי על בסיס Roboto, אז הם נראים אותו סגנון) */
+  font-family: "Roboto", "Heebo", sans-serif;
+  line-height: 1.6;
+  color: #1a1a1a;
+}
+
+h1,
+h2 {
+  line-height: 1.2;
+  margin: 0 0 16px;
+}
+
+/* גודל הכתב יחסי לרוחב החלון (vw), עם מינימום ומקסימום כדי שלא יהיה קטן/ענק מדי.
+   clamp(מינימום, ערך רצוי, מקסימום) */
+h1 {
+  font-size: clamp(30px, 4.4vw, 84px);
+  font-weight: 500;
+}
+
+h2 {
+  font-size: clamp(18px, 2.2vw, 42px);
+  font-weight: 400;
+}
+
+p {
+  font-size: clamp(14px, 1.4vw, 27px);
+  margin: 0;
+}
+
+.container {
+  max-width: max(1100px, 86vw);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ---------- Hero עם אנימציית גלילה ---------- */
+
+/* גובה 300vh = כמה צריך לגלול עד שהאנימציה נגמרת */
+.hero {
+  height: 300vh;
+  background: #efefef;
+  color: #1a1a1a; /* כתב כהה - הטקסט יושב על הצד הלבן של התמונה */
+}
+
+/* נשאר "תקוע" על המסך בזמן שגוללים בתוך ה-hero */
+.hero-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* הבמה ביחס 2:1 (כמו התמונה, 1774x887) ומכסה את כל המסך, כמו background-size: cover.
+   200vh = רוחב התמונה כשהגובה שלה 100vh. ה-0.25 = כמה לחתוך משמאל כשהתמונה רחבה מהמסך */
+.watch-stage {
+  position: absolute;
+  width: max(100%, 200vh);
+  aspect-ratio: 2 / 1;
+  left: calc((100% - max(100%, 200vh)) * 0.25);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.watch-zoom {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-origin: 0 0;
+  /* בלי will-change: ככה הדפדפן מצייר את התמונה מחדש בכל גודל והיא נשארת חדה */
+}
+
+.watch-zoom img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* התקריב החד: יושב בדיוק מעל אזור השעון בתמונה הרגילה (באחוזים מתוך התמונה).
+   הקצוות שלו מתמזגים בהדרגה (mask) כדי שלא יראו איפה הוא נגמר */
+.watch-zoom img.watch-hd {
+  position: absolute;
+  left: 24.803%;
+  top: 30.44%;
+  width: 13.529%;
+  height: 29.312%;
+  opacity: 0; /* הסקריפט מעלה את זה בזמן הזום */
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 55%, transparent 72%);
+  mask-image: radial-gradient(ellipse at center, #000 55%, transparent 72%);
+}
+
+/* המסך של השעון: המיקום נמדד מהפיקסלים של התמונה.
+   המסך בשעון הזה ישר וסימטרי, אז border-radius נותן פינות חלקות ושוות בכל הצדדים */
+.watch-screen {
+  position: absolute;
+  /* ↓↓↓ גודל ומיקום המסך השחור - אפשר לשחק עם 4 המספרים האלה ↓↓↓
+     (באחוזים מתוך התמונה. הכפתורים והזום מתאימים את עצמם לבד) */
+  left: 28.636%;   /* הקצה השמאלי */
+  top: 38.331%;    /* הקצה העליון - מספר גדול יותר = המסך מתחיל נמוך יותר */
+  width: 5.919%;   /* רוחב */
+  height: 12.74%;  /* גובה - אם מזיזים את top למטה, מקטינים את זה באותה כמות */
+  border-radius: 15% / 14%; /* עיגול הפינות: רוחב / גובה */
+  overflow: hidden;
+  /* שחור כמו מסך השעון האמיתי, עם השתקפות זכוכית עדינה למעלה */
+  background:
+    /* השתקפות זכוכית למטה: מתחיל בלבן-זכוכית בקצה ונעלם לשחור (כמו הפס בחלק העליון של השעון).
+       המספר האחרון (14%) = כמה גבוה המעבר עולה. ה-0.3 בשורה הראשונה = כמה לבן הקצה */
+    linear-gradient(to top,
+      rgba(235, 235, 235, 0.3) 0%,
+      rgba(190, 190, 190, 0.15) 4%,
+      rgba(120, 120, 120, 0.06) 9%,
+      rgba(0, 0, 0, 0) 14%),
+    radial-gradient(ellipse at 50% 40%, #161616 0%, #050505 75%);
+  opacity: 0;
+}
+
+.hero-shade {
+  position: absolute;
+  inset: 0;
+  /* הצללה לבנה עדינה מימין, כדי שהכתב הכהה יהיה קריא */
+  background: linear-gradient(to left, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 60%);
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.hero-text {
+  max-width: 50%;
+  will-change: transform, opacity;
+}
+
+/* הכפתורים על מסך השעון (הסקריפט קובע גודל ומיקום) */
+.screen-ui {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  gap: 0.7em;
+  padding: 0 1.2em;
+  box-sizing: border-box;
+  color: #fff;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.screen-title {
+  text-align: center;
+  font-size: 1.4em;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.4em;
+}
+
+/* ---------- הכפתורים: צבע אחיד ונקי, בלי אפקט זכוכית ---------- */
+.btn {
+  display: block;
+  padding: 0.7em 1em;
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-align: center;
+  text-decoration: none;
+  background: #2e2e2e; /* "פרטים נוספים" - אפור כהה */
+  transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+}
+
+/* "לרכישה" - תמיד לבן עם כתב שחור */
+.btn-buy {
+  background: #fff;
+  color: #111;
+}
+
+/* "פרטים נוספים" במעבר עכבר - מתבהר קצת */
+.btn-more:hover {
+  background: #444;
+}
+
+/* "לרכישה" במעבר עכבר - צל לבן מסביב, כאילו הכפתור זוהר.
+   המספר הראשון בכל שורה (14px / 32px) = כמה רחוק הזוהר מתפשט */
+.btn-buy:hover {
+  box-shadow:
+    0 0 14px rgba(255, 255, 255, 0.55),
+    0 0 32px rgba(255, 255, 255, 0.25);
+}
+
+/* ---------- שורת הסטטוס של השעון: שעה + תאריך + סוללה ---------- */
+.status-bar {
+  position: absolute;
+  top: 7%;
+  left: 10%;
+  right: 10%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  direction: ltr;
+  font-size: 0.85em;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: #e9e7e3;
+}
+
+.battery {
+  position: relative;
+  width: 1.9em;
+  height: 0.95em;
+  border: 2px solid #e9e7e3;
+  border-radius: 0.25em;
+  padding: 2px;
+  box-sizing: border-box;
+}
+
+/* הבליטה הקטנה בקצה הסוללה */
+.battery::after {
+  content: "";
+  position: absolute;
+  right: -0.28em;
+  top: 50%;
+  width: 0.14em;
+  height: 0.4em;
+  transform: translateY(-50%);
+  border-radius: 0 2px 2px 0;
+  background: #e9e7e3;
+}
+
+.battery-level {
+  display: block;
+  width: 70%;
+  height: 100%;
+  border-radius: 1px;
+  background: #e9e7e3;
+}
+
+/* חלון "עומד" (צר וגבוה, כמו טלפון): הטקסט יורד מתחת לשעון כדי לא לכסות אותו */
+@media (max-aspect-ratio: 1/1) {
+  .hero-content {
+    align-items: flex-end;
+    padding-bottom: 8vh;
+  }
+
+  .hero-text {
+    max-width: 100%;
+  }
+
+  .hero-shade {
+    /* בטלפון הכתב יושב גם על החלק השחור של התמונה - לכן רקע לבן שעולה מלמטה */
+    background: linear-gradient(to top, rgba(255, 255, 255, 0.92) 0%, rgba(255, 255, 255, 0.75) 30%, rgba(255, 255, 255, 0) 55%);
+  }
+
+  h1 {
+    font-size: clamp(30px, 7vw, 56px);
+  }
+
+  h2 {
+    font-size: clamp(18px, 3.6vw, 30px);
+  }
+
+  p {
+    font-size: clamp(14px, 2.6vw, 20px);
+  }
+}
+
+/* ---------- אזור יתרונות ---------- */
+/* כל הגדלים כאן ב-vw (יחסית לרוחב החלון), כך ששלושת הכרטיסים
+   תמיד נשארים בשורה אחת והכול גדל וקטן ביחד */
+.features {
+  background: #f5f5f5;
+  padding: clamp(48px, 9vw, 160px) 0;
+  text-align: center;
+}
+
+.features-title {
+  font-size: clamp(24px, 3vw, 56px);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: #1a1a1a;
+  margin: 0 0 clamp(24px, 3.5vw, 64px);
+}
+
+/* קו דק וקצר מתחת לכותרת */
+.features-title::after {
+  content: "";
+  display: block;
+  width: clamp(28px, 3vw, 56px);
+  height: 1px;
+  margin: 0.45em auto 0;
+  background: #1a1a1a;
+  opacity: 0.35;
+}
+
+/* תמיד 3 עמודות, בכל גודל מסך */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(8px, 2vw, 36px);
+}
+
+.feature-card {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: clamp(10px, 1.2vw, 22px);
+  overflow: hidden; /* כדי שהתמונה למעלה תקבל את הפינות המעוגלות של הכרטיס */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03), 0 10px 30px rgba(0, 0, 0, 0.04);
+  transition: transform 0.35s, box-shadow 0.35s;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 18px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* התמונה בראש הכרטיס. aspect-ratio = יחס רוחב:גובה (4/3 = קצת מלבנית) */
+.feature-media {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  /* רקע אפור עדין שמופיע כל עוד אין תמונה */
+  background: linear-gradient(145deg, #ececec 0%, #dadada 100%);
+}
+
+.feature-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;        /* ממלא את המסגרת בלי למתוח את התמונה */
+  object-position: center 40%; /* איזה חלק מהתמונה רואים כשהיא נחתכת (40% = קצת מעל האמצע) */
+  /* שחור-לבן חזק: grayscale מוריד צבע, contrast מחזק את השחורים והלבנים.
+     contrast גבוה יותר = שחור-לבן עז יותר (1 = רגיל) */
+  filter: grayscale(1) contrast(1.45) brightness(1.03);
+  transition: transform 0.6s ease;
+}
+
+/* זום עדין על התמונה כשעוברים על הכרטיס */
+.feature-card:hover .feature-media img {
+  transform: scale(1.05);
+}
+
+.feature-body {
+  padding: clamp(12px, 2.4vw, 44px) clamp(8px, 2vw, 40px) clamp(14px, 2.8vw, 52px);
+}
+
+/* אייקון קו דק (Lucide) - הצבע נלקח מ-color */
+.feature-icon {
+  width: clamp(26px, 3vw, 56px);
+  height: clamp(26px, 3vw, 56px);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  color: #1a1a1a;
+  margin-bottom: clamp(10px, 1.6vw, 28px);
+}
+
+.feature-card h3 {
+  font-size: clamp(13px, 1.5vw, 28px);
+  font-weight: 500;
+  color: #1a1a1a;
+  line-height: 1.25;
+  margin: 0 0 0.5em;
+}
+
+.feature-card p {
+  font-size: clamp(11px, 1.05vw, 19px);
+  font-weight: 300;
+  color: #6b6b6b;
+  line-height: 1.6;
+}
+
+/* ---------- טלפון / מסך קטן: הכרטיסים אחד מתחת לשני, קומפקטיים ---------- */
+/* כל כרטיס הופך לפס נמוך: תמונה קטנה בצד ימין והטקסט לידה */
+@media (max-width: 700px) {
+  .features {
+    padding: 48px 0;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr; /* עמודה אחת = כרטיס מתחת לכרטיס */
+    gap: 12px;
+  }
+
+  .feature-card {
+    display: flex;
+    text-align: right;
+    border-radius: 14px;
+  }
+
+  /* התמונה: שליש מרוחב הכרטיס, בגובה הכרטיס */
+  .feature-media {
+    flex: 0 0 34%;
+    aspect-ratio: auto;
+    min-height: 110px;
+    position: relative;
+  }
+
+  /* התמונה ממלאת את המסגרת ולא קובעת את גובה הכרטיס - הטקסט קובע */
+  .feature-media img {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* האייקון והכותרת באותה שורה, והפסקה מתחתם */
+  .feature-body {
+    flex: 1;
+    padding: 14px 16px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    align-content: center;
+    column-gap: 8px;
+  }
+
+  .feature-icon {
+    width: 22px;
+    height: 22px;
+    margin: 0;
+  }
+
+  .feature-card h3 {
+    font-size: 16px;
+    margin: 0;
+  }
+
+  .feature-card p {
+    grid-column: 1 / -1;
+    font-size: 13px;
+    margin-top: 6px;
+  }
+}

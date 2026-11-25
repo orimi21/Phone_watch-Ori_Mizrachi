@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Apple Watch SE</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- ה-hero גבוה (300vh) כדי שתהיה "דרך" לגלול בה. בתוכו קופסה דביקה בגובה המסך -->
+  <section class="hero">
+    <div class="hero-sticky">
+
+      <!-- הבמה: התמונה + "המסך" של השעון. הסקריפט מגדיל את watch-zoom -->
+      <div class="watch-stage">
+        <div class="watch-zoom">
+          <img src="images/watch_white.jpg" alt="שעון חכם Apple Watch SE">
+          <!-- תקריב חד של השעון (מהתמונה המקורית ברזולוציה גבוהה).
+               מופיע בהדרגה בזמן הזום, בדיוק מעל השעון, כדי שהשעון יישאר חד מקרוב -->
+          <img class="watch-hd" src="images/watch_white_hd.jpg" alt="" aria-hidden="true">
+          <div class="watch-screen"></div>
+        </div>
+      </div>
+
+      <div class="hero-shade"></div>
+
+      <div class="container hero-content">
+        <div class="hero-text">
+          <h1>Apple Watch SE</h1>
+          <h2>השעון החכם שמלווה אותך לאורך כל היום</h2>
+          <p>צעדים, פעילות והתראות מהטלפון, במבט אחד על פרק כף היד.</p>
+        </div>
+      </div>
+
+      <!-- התוכן שמופיע על מסך השעון אחרי שהוא "נדלק" -->
+      <div class="screen-ui">
+        <div class="status-bar">
+          <span class="watch-time">07:20</span>
+          <span class="watch-date">FRI 29</span>
+          <span class="battery" aria-label="סוללה"><span class="battery-level"></span></span>
+        </div>
+        <span class="screen-title">Apple Watch SE</span>
+        <!-- מוביל לדף המוצר באתר iDigital. target="_blank" = נפתח בלשונית חדשה, כדי שהאתר שלנו יישאר פתוח -->
+        <a href="https://www.idigital.co.il/products/2025-apple-watch-se-sport-band-3rd-generation-meh34zr-a"
+          class="btn btn-buy" target="_blank" rel="noopener">לרכישה</a>
+        <a href="#details" class="btn btn-more">פרטים נוספים</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- אזור יתרונות: שלושה יתרונות עם אייקונים מספרייה אחת (Lucide), באותו סגנון קו -->
+  <section class="features" id="details">
+    <div class="container">
+      <h2 class="features-title">למה אנחנו</h2>
+
+      <div class="features-grid">
+
+        <!-- כל כרטיס: תמונה למעלה (feature-media) ומתחת הטקסט (feature-body).
+             את התמונות שמים בתיקייה images בשמות: why-battery.jpg, why-light.jpg, why-water.jpg.
+             כל עוד אין תמונה - מופיע רקע אפור עדין במקומה -->
+        <article class="feature-card">
+          <div class="feature-media">
+            <img src="images/why-battery.jpg" alt="שעון על היד לאורך יום שלם" onerror="this.remove()">
+          </div>
+          <div class="feature-body">
+            <svg class="feature-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <rect width="16" height="10" x="2" y="7" rx="2" ry="2" />
+              <line x1="22" x2="22" y1="11" y2="13" />
+              <line x1="6" x2="6" y1="11" y2="13" />
+              <line x1="10" x2="10" y1="11" y2="13" />
+              <line x1="14" x2="14" y1="11" y2="13" />
+            </svg>
+            <h3>סוללה לאורך זמן</h3>
+            <p>עד 18 שעות בטעינה אחת, מהבוקר ועד הלילה, כדי שתתרכז ביום שלך ולא במטען.</p>
+          </div>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-media">
+            <img src="images/why-light.jpg" alt="שעון קל ליד נוצה" onerror="this.remove()">
+          </div>
+          <div class="feature-body">
+            <svg class="feature-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12.67 19a2 2 0 0 0 1.416-.588l6.154-6.172a6 6 0 0 0-8.49-8.49L5.586 9.914A2 2 0 0 0 5 11.328V18a1 1 0 0 0 1 1z" />
+              <path d="M16 8 2 22" />
+              <path d="M17.5 15H9" />
+            </svg>
+            <h3>קל ונוח</h3>
+            <p>רצועת ספורט רכה וגוף קליל, כל כך נוח שתשכח שהוא עליך.</p>
+          </div>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-media">
+            <img src="images/why-water.jpg" alt="טיפות מים על מסך השעון" onerror="this.remove()">
+          </div>
+          <div class="feature-body">
+            <svg class="feature-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z" />
+            </svg>
+            <h3>חופשי במים</h3>
+            <p>עמיד במים עד עומק 50 מטר: אימון מזיע, גשם או שחייה בבריכה, השעון ממשיך איתך.</p>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
