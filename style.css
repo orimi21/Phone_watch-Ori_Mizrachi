@@ -240,31 +240,38 @@ p {
 }
 
 /* חלון "עומד" (צר וגבוה, כמו טלפון): הטקסט יורד מתחת לשעון כדי לא לכסות אותו */
+/* בטלפון: השעון זז לצד שמאל והטקסט עומד לידו בצד ימין, על הרקע הלבן */
 @media (max-aspect-ratio: 1/1) {
-  .hero-content {
-    align-items: flex-end;
-    padding-bottom: 8vh;
+  /* מזיזים את התמונה כך שמרכז השעון (31.6% מרוחב התמונה) יהיה ב-22% מרוחב המסך.
+     מספר קטן יותר במקום ה-22% = השעון זז עוד שמאלה */
+  .watch-stage {
+    left: calc(22% - max(100%, 200vh) * 0.316);
   }
 
+  .hero-content {
+    align-items: center; /* הטקסט באמצע הגובה, ליד השעון */
+  }
+
+  /* הטקסט תופס רק את הצד הימני של המסך, כדי לא לעלות על השעון */
   .hero-text {
-    max-width: 100%;
+    max-width: 56%;
   }
 
   .hero-shade {
-    /* בטלפון הכתב יושב גם על החלק השחור של התמונה - לכן רקע לבן שעולה מלמטה */
-    background: linear-gradient(to top, rgba(255, 255, 255, 0.92) 0%, rgba(255, 255, 255, 0.75) 30%, rgba(255, 255, 255, 0) 55%);
+    /* הצללה לבנה עדינה רק ב-30% התחתונים של המסך */
+    background: linear-gradient(to top, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.4) 15%, rgba(255, 255, 255, 0) 30%);
   }
 
   h1 {
-    font-size: clamp(30px, 7vw, 56px);
+    font-size: clamp(26px, 7vw, 48px);
   }
 
   h2 {
-    font-size: clamp(18px, 3.6vw, 30px);
+    font-size: clamp(16px, 4.2vw, 28px);
   }
 
   p {
-    font-size: clamp(14px, 2.6vw, 20px);
+    font-size: clamp(13px, 3.5vw, 20px);
   }
 }
 
