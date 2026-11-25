@@ -1,5 +1,12 @@
+/* האתר בהיר בלבד - כדי שדפדפנים בטלפון (כמו Samsung Internet) לא יהפכו אותו לכהה במצב לילה */
+:root {
+  color-scheme: light only;
+  background: #fff;
+}
+
 body {
   margin: 0;
+  background: #fff;
   /* Roboto לאותיות באנגלית ו-Heebo לעברית (Heebo בנוי על בסיס Roboto, אז הם נראים אותו סגנון) */
   font-family: "Roboto", "Heebo", sans-serif;
   line-height: 1.6;

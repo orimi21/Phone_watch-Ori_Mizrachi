@@ -53,15 +53,23 @@ function update() {
   const centerX = stageLeft + localX;
   const centerY = stageTop + localY;
 
-  // ההגדלה הסופית: המסך ממלא בערך 62% מגובה החלון (או 80% מהרוחב בטלפון).
+  // טלפון = חלון "עומד" (גבוה יותר מרחב)
+  const portrait = vh > vw;
+
+  // ההגדלה הסופית: המסך ממלא בערך 62% מגובה החלון (או 80% מהרוחב).
+  // בטלפון רק 62% מהרוחב, כדי שכל גוף השעון (כולל הכתר בצד) ייכנס למסך.
   // לא מגדילים יותר מזה כדי שהתמונה (1920px) לא תיראה מטושטשת
-  const maxScale = Math.min((vh * 0.62) / screenH, (vw * 0.8) / screenW);
+  const fitW = portrait ? 0.62 : 0.8;
+  const maxScale = Math.min((vh * 0.62) / screenH, (vw * fitW) / screenW);
+
+  // לאן מגיע מרכז המסך של השעון בסוף הזום: באמצע, ובטלפון קצת למעלה (42% מהגובה)
+  const targetY = portrait ? vh * 0.42 : vh / 2;
 
   // שלב 1: התקרבות לשעון והזזתו למרכז (0% עד 55% מהגלילה)
   const z = ease(range(p, 0, 0.55));
   const scale = 1 + (maxScale - 1) * z;
   const tx = localX + (vw / 2 - centerX) * z - scale * localX;
-  const ty = localY + (vh / 2 - centerY) * z - scale * localY;
+  const ty = localY + (targetY - centerY) * z - scale * localY;
   zoom.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
 
   // התקריב החד מופיע בהדרגה בזמן הזום (בין 12% ל-35% מהגלילה),
@@ -86,7 +94,7 @@ function update() {
   ui.style.width = uiW + 'px';
   ui.style.height = uiH + 'px';
   ui.style.left = (vw - uiW) / 2 + 'px';
-  ui.style.top = (vh - uiH) / 2 + 'px';
+  ui.style.top = targetY - uiH / 2 + 'px';
   ui.style.fontSize = Math.max(uiW / 22, 13) + 'px';
   ui.style.opacity = u;
   ui.style.transform = `translateY(${(1 - u) * 20}px)`;
